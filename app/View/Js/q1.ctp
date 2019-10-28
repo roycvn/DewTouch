@@ -21,7 +21,7 @@ Question: Advanced Input Field</div>
 <button class="close" data-dismiss="alert"></button>
 The table you start with</div>
 
-<table class="table table-striped table-bordered table-hover">
+<table class="table table-striped table-bordered table-hover dynamic-rows-table">
 <thead>
 <th><span id="add_item_button" class="btn mini green addbutton" onclick="addToObj=false">
 											<i class="icon-plus"></i></span></th>
@@ -32,12 +32,11 @@ The table you start with</div>
 
 <tbody>
 	<tr>
-	<td></td>
-	<td><textarea name="data[1][description]" class="m-wrap  description required" rows="2" ></textarea></td>
-	<td><input name="data[1][quantity]" class=""></td>
-	<td><input name="data[1][unit_price]"  class=""></td>
-	
-</tr>
+		<td></td>
+		<td><textarea name="data[1][description]" class="custom-editbox m-wrap description required" rows="2" >Description Text</textarea></td>
+		<td><input name="data[1][quantity]" class="custom-editbox" value="Quantity Text"></td>
+		<td><input name="data[1][unit_price]"  class="custom-editbox" value="Unit Price Text"></td>
+	</tr>
 
 </tbody>
 
@@ -63,17 +62,64 @@ Your browser does not support the video tag.
 <?php $this->start('script_own');?>
 <script>
 $(document).ready(function(){
-
+	var tbodyElement = $('.dynamic-rows-table');
+	var tbodyRowIndex = 1;
 	$("#add_item_button").click(function(){
-
-
-		alert("suppose to add a new row");
+		tbodyRowIndex++;
+		var appendHTML = '<td></td>\
+												<td><textarea name="data[' + tbodyRowIndex + '][description]" class="custom-editbox m-wrap description required" rows="2" >Description Text</textarea></td>\
+												<td><input name="data[' + tbodyRowIndex + '][quantity]" class="custom-editbox" value="Quantity Text"></td>\
+												<td><input name="data[' + tbodyRowIndex + '][unit_price]"  class="custom-editbox" value="Unit Price Text"></td>';
 		
+		var row = document.createElement('tr');
+		row.innerHTML = appendHTML;
+		tbodyElement.append(row);
 
+		inputTextOperation(true);
+		activateEditboxEvents();
+	});
+
+
+	var inputTextOperation = function(lockStatus, element = null) {
+		if(element) {
+			if(lockStatus) {
+				element.attr('readonly', 'readonly')
+							 .addClass('lock-editbox');
+			} else {
+				element.removeAttr('readonly')
+							 .removeClass('lock-editbox');
+			}
+		} else {
+			$('.custom-editbox').each(function(e) {
+				if(lockStatus) {
+						$(this).attr('readonly', 'readonly')
+									 .addClass('lock-editbox');
+				} else {
+						$(this).removeAttr('readonly')
+									 .removeClass('lock-editbox');
+				}
+			});
+		}
+	}
+
+	var activateEditboxEvents = function() {
+		$('.custom-editbox').each(function(e) {
+			$(this).click(function(inputEvent) {
+				inputTextOperation(false, $(this));
+			});
+			$(this).blur(function(inputEvent) {
+				inputTextOperation(true, $(this));
+			});
 		});
+	}
 
-	
+	inputTextOperation(true);
+	activateEditboxEvents();	
 });
 </script>
+
+<style>
+	.lock-editbox {border: none; height: auto; background-color: rgba(0, 0, 0, 0); resize: none;}
+</style>
 <?php $this->end();?>
 

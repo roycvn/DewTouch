@@ -14,13 +14,12 @@
 		}
 
 		public function view($id){
-
+			
 			if($id != null){
 
 				$this->loadModel('OrderDetail');
 				$order_details = $this->OrderDetail->find('all',array('conditions'=>array('OrderDetail.valid'=>1,'OrderDetail.order_id'=>$id)));
-				
-				// debug($order_details);exit;
+				//debug($order_details);exit;
 
 				$this->set('order_details',$order_details);
 
