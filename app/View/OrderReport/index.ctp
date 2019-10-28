@@ -13,60 +13,67 @@
 			echo $this->Form->submit('View Order Ingredients', array('class' => 'btn btn-primary'));
 			echo $this->Form->end();
 
-			$order_full_details = $order_list_with_details[$this->request->data['OrderDetails']['order_id']];
+			$order_full_details = null;
+			if(isset($this->request->data['OrderDetails']['order_id'])) {
+				$order_full_details = $order_list_with_details[$this->request->data['OrderDetails']['order_id']];
+			}
+
+			if($order_full_details) {
 		?>
 
-		<table border='1'>
-			<thead>
-				<tr>
-					<th colspan="2"><?php echo $order_full_details['name']; ?></th>
-				</tr>
-				<tr>
-					<th style="width:250px;text-align:left;padding-left:5px">Dish</th>
-					<th style="width:100px;text-align:left;padding-left:5px">Quantity</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach($order_full_details['items'] as $item): ?>
+			<table border='1'>
+				<thead>
 					<tr>
-						<td style="width:250px;text-align:left;padding-left:5px">
-							<?php echo $item['name']; ?>
-						</td>
-						<td style="width:100px;text-align:left;padding-left:5px">
-							<?php echo $item['quantity']; ?>
-						</td>
+						<th colspan="2"><?php echo $order_full_details['name']; ?></th>
 					</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
-		<br/>
-		<?php foreach($order_full_details['items'] as $item): ?>
-		<table border='1'>
-			<thead>
-				<tr>
-					<th colspan="2">Ingredient of <?php echo $item['name']; ?></th>
-				</tr>
-				<tr>
-					<th style="width:250px;text-align:left;padding-left:5px">Name</th>
-					<th style="width:100px;text-align:left;padding-left:5px">Value</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php 
-					foreach($item_list_with_ingredients[$item['item_id']]['ingredients'] as $details): ?>
 					<tr>
-						<td style="width:250px;text-align:left;padding-left:5px">
-							<?php echo $details['name']; ?>
-						</td>
-						<td style="width:100px;text-align:left;padding-left:5px">
-							<?php echo $details['value']; ?>
-						</td>
+						<th style="width:250px;text-align:left;padding-left:5px">Dish</th>
+						<th style="width:100px;text-align:left;padding-left:5px">Quantity</th>
 					</tr>
-				<?php endforeach; ?>
-			</tbody>
-		</table>
-		<br>
-		<?php endforeach; ?>
+				</thead>
+				<tbody>
+					<?php foreach($order_full_details['items'] as $item): ?>
+						<tr>
+							<td style="width:250px;text-align:left;padding-left:5px">
+								<?php echo $item['name']; ?>
+							</td>
+							<td style="width:100px;text-align:left;padding-left:5px">
+								<?php echo $item['quantity']; ?>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+			<br/>
+			<?php foreach($order_full_details['items'] as $item): ?>
+			<table border='1'>
+				<thead>
+					<tr>
+						<th colspan="2">Ingredient of <?php echo $item['name']; ?></th>
+					</tr>
+					<tr>
+						<th style="width:250px;text-align:left;padding-left:5px">Name</th>
+						<th style="width:100px;text-align:left;padding-left:5px">Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php 
+						foreach($item_list_with_ingredients[$item['item_id']]['ingredients'] as $details): ?>
+						<tr>
+							<td style="width:250px;text-align:left;padding-left:5px">
+								<?php echo $details['name']; ?>
+							</td>
+							<td style="width:100px;text-align:left;padding-left:5px">
+								<?php echo $details['value']; ?>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+			<br>
+		<?php endforeach; 
+			}
+		?>
 	</div>
 	<br/>
 	<!-- end of individual-order-report -->
